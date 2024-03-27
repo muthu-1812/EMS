@@ -1,7 +1,19 @@
+import os
+import pickle
+
 from Company import Company
 from Employee import Employee
 
-company = Company("ABC_COMPANY")
+if os.path.isfile('data.pickle'):
+    with open('data.pickle', 'rb') as f:
+        company = pickle.load(f)
+else:
+    company = Company("ABC_COMPANY")
+
+
+def save_data_to_pickle():
+    with open('data.pickle', 'wb') as f:
+        pickle.dump(company, f)
 
 
 def create_department(name):
@@ -61,6 +73,7 @@ def display_options():
 def check_if_user_wants_to_exit():
     x = input("DO YOU WANT TO CONTINUE(y/N):")
     if x == "N":
+        save_data_to_pickle()
         exit()
 
 
@@ -68,7 +81,7 @@ def main():
     # I should be using argparse
     while True:
         display_options()
-        choice = int(input("Enter your choice: "))
+        choice = int(input("ENTER YOUR CHOICE: "))
 
         if choice == 1:
 
@@ -121,7 +134,12 @@ if __name__ == '__main__':
     # TODO I have to validate if emp already created
     # TODO validate if dept already created
     # TODO Ideally I should save changes before it exits because of raising an exception
-    main()
+
+    try:
+        main()
+    except Exception as e:
+        save_data_to_pickle()
+        raise e
     # print(company.name)
     #
     # d1 = create_department("Engg")
