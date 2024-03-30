@@ -1,19 +1,7 @@
-import os
-import pickle
-
-from Company import Company
 from Employee import Employee
+from pickling_utils import init_company, save_data_to_pickle
 
-if os.path.isfile('data.pickle'):
-    with open('data.pickle', 'rb') as f:
-        company = pickle.load(f)
-else:
-    company = Company("ABC_COMPANY")
-
-
-def save_data_to_pickle():
-    with open('data.pickle', 'wb') as f:
-        pickle.dump(company, f)
+company = init_company()
 
 
 def create_department(name):
@@ -46,7 +34,7 @@ def remove_employee_from_department(dept_name, emp_id):
     if removed_emp:
         dept = company.get_department("NO_DEPARTMENT")
         dept.add_employee(removed_emp)
-        print(f"Employee {removed_emp.name} has been removed from {dept_name}")
+        print(f"Employee {emp_id} has been removed from {dept_name}")
 
     else:
         print("Employee does not belong in this department")
@@ -73,7 +61,7 @@ def display_options():
 def check_if_user_wants_to_exit():
     x = input("DO YOU WANT TO CONTINUE(y/N):")
     if x == "N":
-        save_data_to_pickle()
+        save_data_to_pickle(company)
         exit()
 
 
@@ -138,18 +126,5 @@ if __name__ == '__main__':
     try:
         main()
     except Exception as e:
-        save_data_to_pickle()
+        save_data_to_pickle(company)
         raise e
-    # print(company.name)
-    #
-    # d1 = create_department("Engg")
-    # print(d1.name)
-    # d2 = create_department("Ops")
-    # print(d2.name)
-    #
-    # print(company.departments)
-    # create_employee(1, "muthu", "SDE", "Engg")
-    # create_employee(2, "mm", "SDE")
-    # create_employee(3, "gana", "SDE")
-    #
-    # print(company)
